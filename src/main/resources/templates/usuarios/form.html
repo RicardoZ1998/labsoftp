@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Formulario Usuarios - TechLab</title>
+
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+
+<div class="layout">
+
+    <!-- MENÚ LATERAL -->
+    <aside class="sidebar" id="sidebar">
+
+        <div class="logo">
+            <span class="logo-icon">⚡</span>
+            <h2>TechLab</h2>
+        </div>
+
+        <p class="menu-label">MENÚ PRINCIPAL</p>
+
+        <nav class="menu">
+
+            <a href="#" class="menu-item">
+                <span>🏠</span>
+                Inicio
+            </a>
+
+            <a th:href="@{/view/usuarios}"
+               class="menu-item active">
+                <span>👥</span>
+                Usuarios
+            </a>
+
+            <a th:href="@{/view/clientes}"
+            <span>🙋‍♂️</span>
+            Clientes
+            </a>
+
+            <a href="#" class="menu-item">
+                <span>⚙️</span>
+                Configuración
+            </a>
+
+        </nav>
+
+        <div class="sidebar-footer">
+            <p>🚀 Laboratorio de Software</p>
+            <small>Spring Boot + Thymeleaf</small>
+        </div>
+
+    </aside>
+
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <main class="main-content">
+
+        <!-- BARRA SUPERIOR -->
+        <header class="topbar">
+
+            <div class="topbar-left">
+
+                <button id="menuToggle"
+                        class="menu-toggle"
+                        type="button">
+                    ☰
+                </button>
+
+                <div>
+                    <h2>Panel Administrativo</h2>
+                    <p>Gestión de usuarios</p>
+                </div>
+
+            </div>
+
+            <div class="user-profile">
+                <span>👨‍💻</span>
+                Administrador
+            </div>
+
+        </header>
+
+
+        <!-- ENCABEZADO -->
+        <section class="page-header">
+
+            <div>
+
+                <h1 th:text="${usuarios.id_usuario == null}
+                    ? '➕ Registrar Usuario'
+                    : '✏️ Editar Usuario'">
+                    Registrar Usuario
+                </h1>
+
+                <p>
+                    Completa los datos para registrar
+                    o actualizar un usuario.
+                </p>
+
+            </div>
+
+            <a th:href="@{/view/usuarios}"
+               class="btn btn-secondary">
+                ← Volver al listado
+            </a>
+
+        </section>
+
+
+        <!-- FORMULARIO -->
+        <section class="form-card">
+
+            <div class="form-header">
+
+                <div class="form-header-icon">
+                    👤
+                </div>
+
+                <div>
+                    <h2>Información del Usuario</h2>
+                    <p>Ingresa los datos solicitados.</p>
+                </div>
+
+            </div>
+
+
+            <form th:action="@{/view/usuarios/save}"
+                  th:object="${usuarios}"
+                  method="post"
+                  class="user-form">
+
+                <input type="hidden" th:field="*{id_usuario}">
+
+                <div class="form-grid">
+
+                    <!-- NOMBRE -->
+                    <div class="form-group">
+
+                        <label for="nombre">
+                            👤 Nombre completo
+                        </label>
+
+                        <input type="text"
+                               id="nombre"
+                               th:field="*{nombre}"
+                               placeholder="Ingrese el nombre completo"
+                               required>
+
+                    </div>
+
+
+                    <!-- TELÉFONO -->
+                    <div class="form-group">
+
+                        <label for="telefono">
+                            📱 Teléfono
+                        </label>
+
+                        <input type="tel"
+                               id="telefono"
+                               th:field="*{telefono}"
+                               placeholder="Ingrese el teléfono"
+                               required>
+
+                    </div>
+
+
+                    <!-- CORREO -->
+                    <div class="form-group">
+
+                        <label for="correo">
+                            📧 Correo electrónico
+                        </label>
+
+                        <input type="email"
+                               id="correo"
+                               th:field="*{correo}"
+                               placeholder="correo@ejemplo.com"
+                               required>
+
+                    </div>
+
+
+                    <!-- USERNAME -->
+                    <div class="form-group">
+
+                        <label for="username">
+                            💻 Nombre de usuario
+                        </label>
+
+                        <input type="text"
+                               id="username"
+                               th:field="*{username}"
+                               placeholder="Ingrese el username"
+                               required>
+
+                    </div>
+
+
+                    <!-- CONTRASEÑA -->
+                    <div class="form-group">
+
+                        <label for="contrasena">
+                            🔒 Contraseña
+                        </label>
+
+                        <div class="password-container">
+
+                            <input type="password"
+                                   id="contrasena"
+                                   th:field="*{contrasena}"
+                                   placeholder="Ingrese la contraseña"
+                                   th:required="${usuarios.id_usuario == null}">
+
+                            <button type="button"
+                                    class="toggle-password"
+                                    data-target="contrasena"
+                                    aria-label="Mostrar u ocultar contraseña">
+                                👁️
+                            </button>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- ROL -->
+                    <div class="form-group">
+
+                        <label for="rol">
+                            🛡️ Rol del usuario
+                        </label>
+
+                        <input type="text"
+                               id="rol"
+                               th:field="*{rol}"
+                               placeholder="Ejemplo: ADMIN, USER"
+                               required>
+
+                    </div>
+
+                </div>
+
+
+                <!-- BOTONES -->
+                <div class="form-actions">
+
+                    <a th:href="@{/view/usuarios}"
+                       class="btn btn-cancel">
+                        ✖ Cancelar
+                    </a>
+
+                    <button type="submit"
+                            class="btn btn-primary">
+
+                        💾 Guardar Usuario
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </section>
+
+    </main>
+
+</div>
+
+<script th:src="@{/js/script.js}"></script>
+
+</body>
+</html>

@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Gestión de Usuarios</title>
+
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+
+<div class="layout">
+
+    <!-- MENÚ LATERAL -->
+    <aside class="sidebar" id="sidebar">
+
+        <div class="logo">
+            <span class="logo-icon">⚡</span>
+            <h2>TechLab</h2>
+        </div>
+
+        <p class="menu-label">MENÚ PRINCIPAL</p>
+
+        <nav class="menu">
+
+            <a href="#" class="menu-item">
+                <span>🏠</span>
+                Inicio
+            </a>
+
+            <a th:href="@{/view/usuarios}"
+               class="menu-item active">
+                <span>👥</span>
+                Usuarios
+            </a>
+
+            <a th:href="@{/view/clientes}"
+                <span>🙋‍♂️</span>
+                Clientes
+            </a>
+
+            <a href="#" class="menu-item">
+                <span>⚙️</span>
+                Configuración
+            </a>
+
+        </nav>
+
+        <div class="sidebar-footer">
+            <p>🚀 Laboratorio de Software</p>
+            <small>Spring Boot + Thymeleaf</small>
+        </div>
+
+    </aside>
+
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <main class="main-content">
+
+        <!-- BARRA SUPERIOR -->
+        <header class="topbar">
+
+            <div class="topbar-left">
+
+                <button id="menuToggle" class="menu-toggle">
+                    ☰
+                </button>
+
+                <div>
+                    <h2>Panel Administrativo</h2>
+                    <p>Bienvenido al sistema</p>
+                </div>
+
+            </div>
+
+            <div class="user-profile">
+                <span>👨‍💻</span>
+                Administrador
+            </div>
+
+        </header>
+
+
+        <!-- ENCABEZADO -->
+        <section class="page-header">
+
+            <div>
+                <h1>👥 Gestión de Usuarios</h1>
+
+                <p>
+                    Administra los usuarios registrados
+                    en el sistema.
+                </p>
+            </div>
+
+            <a th:href="@{/view/usuarios/form}"
+               class="btn btn-primary">
+                ➕ Registrar Usuario
+            </a>
+
+        </section>
+
+
+        <!-- TARJETA ESTADÍSTICA -->
+        <section class="stats-container">
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    👥
+                </div>
+
+                <div>
+                    <p>Total de usuarios</p>
+
+                    <h2 id="totalUsuarios"
+                        th:text="${#lists.size(usuarios)}">
+                        0
+                    </h2>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- MENSAJE -->
+        <div class="alert-success"
+             th:if="${success}"
+             th:text="${success}">
+        </div>
+
+
+        <!-- TABLA -->
+        <section class="table-card">
+
+            <div class="table-header">
+
+                <div>
+                    <h2>Usuarios Registrados</h2>
+
+                    <p>
+                        Consulta y administra la información.
+                    </p>
+                </div>
+
+                <div class="search-box">
+
+                    <span>🔍</span>
+
+                    <input type="text"
+                           id="buscarUsuario"
+                           placeholder="Buscar usuario...">
+
+                </div>
+
+            </div>
+
+
+            <div class="table-responsive">
+
+                <table id="tablaUsuarios">
+
+                    <thead>
+
+                    <tr>
+                        <th>Acciones</th>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Teléfono</th>
+                        <th>Correo</th>
+                        <th>Username</th>
+                        <th>Contraseña</th>
+                        <th>Rol</th>
+                    </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                    <tr th:each="usuario : ${usuarios}">
+
+                        <!-- ACCIONES -->
+                        <td>
+
+                            <div class="actions">
+
+                                <a th:href="@{'/view/usuarios/edit/' + ${usuario.id_usuario}}"
+                                   class="btn-action btn-edit"
+                                   title="Editar usuario">
+                                    ✏️
+                                </a>
+
+                                <form th:action="@{'/view/usuarios/delete/' + ${usuario.id_usuario}}"
+                                      method="post"
+                                      class="form-delete">
+
+                                    <button type="submit"
+                                            class="btn-action btn-delete"
+                                            title="Eliminar usuario">
+                                        🗑️
+                                    </button>
+
+                                </form>
+
+                            </div>
+
+                        </td>
+
+                        <td>
+                            <span class="badge-id"
+                                  th:text="${usuario.id_usuario}">
+                            </span>
+                        </td>
+
+                        <td th:text="${usuario.nombre}"></td>
+
+                        <td th:text="${usuario.telefono}"></td>
+
+                        <td th:text="${usuario.correo}"></td>
+
+                        <td th:text="${usuario.username}"></td>
+
+                        <td>
+                            <span class="badge-password">
+                                🔒 Protegida
+                            </span>
+                        </td>
+
+                        <td>
+                            <span class="badge-role"
+                                  th:text="${usuario.rol}">
+                            </span>
+                        </td>
+
+                    </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+            <div class="table-footer">
+
+                <p>
+                    Usuarios visibles:
+                    <strong id="usuariosVisibles">0</strong>
+                </p>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+<script th:src="@{/js/script.js}"></script>
+
+</body>
+</html>
