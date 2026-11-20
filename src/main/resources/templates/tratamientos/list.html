@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Tratamientos - Sistema de Gestión Veterinaria</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+
+<header th:replace="~{fragments/sidebar :: topbar}"></header>
+
+<div class="main-wrapper">
+
+    <aside th:replace="~{fragments/sidebar :: sidebar('tratamientos')}"></aside>
+
+    <main class="content-area">
+
+        <div class="page-title">
+            <span>Tratamientos</span>
+        </div>
+
+        <div class="alert alert-success" th:if="${success}" th:text="${success}"></div>
+        <div class="alert alert-danger" th:if="${error}" th:text="${error}"></div>
+
+        <div class="table-toolbar">
+            <div class="search-box">
+                <input type="text" id="tableSearch" class="search-input" placeholder="Buscar por mascota o medicamento...">
+            </div>
+            <a th:href="@{/tratamientos/form}" class="btn btn-primary">+ Nuevo Tratamiento</a>
+        </div>
+
+        <div class="table-container">
+            <table class="data-table">
+                <thead>
+                <tr>
+                    <th style="width: 40px;">ID</th>
+                    <th>Medicamento / Procedimiento</th>
+                    <th>Dosis / Frecuencia</th>
+                    <th style="width: 90px;">Fecha Cita</th>
+                    <th>Mascota</th>
+                    <th>Veterinario</th>
+                    <th style="width: 140px; text-align: center;">Acciones</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="t : ${tratamientos}">
+                    <td th:text="${t.id}">1</td>
+                    <td th:text="${t.descripcion}">Amoxicilina 250mg</td>
+                    <td th:text="${t.dosis}">1 tableta cada 12 horas</td>
+                    <td th:text="${t.cita != null ? t.cita.fecha : '-'}">2026-11-20</td>
+                    <td th:text="${t.cita != null and t.cita.mascota != null ? t.cita.mascota.nombre : 'Sin asignar'}">Rocky</td>
+                    <td th:text="${t.cita != null ? t.cita.veterinario : '-'}">Dr. Juan Pinillos</td>
+                    <td style="text-align: center;">
+                        <a th:href="@{/tratamientos/edit/{id}(id=${t.id})}" class="action-link">[Editar]</a>
+                        <span> | </span>
+                        <form th:action="@{/tratamientos/delete/{id}(id=${t.id})}" method="post" style="display:inline;" onsubmit="return confirm('¿Confirma la eliminación del tratamiento?');">
+                            <button type="submit" class="action-link delete">[Eliminar]</button>
+                        </form>
+                    </td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(tratamientos)}" id="emptyRow">
+                    <td colspan="7" style="text-align: center; color: #777777; padding: 15px;">
+                        No existen tratamientos registrados.
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </main>
+
+</div>
+
+<script>
+    document.getElementById('tableSearch')?.addEventListener('input', function () {
+        const filter = this.value.toLowerCase().trim();
+        const rows = document.querySelectorAll('.data-table tbody tr:not(#emptyRow)');
+        rows.forEach(row => {
+            const text = row.textContent.toLowerCase();
+            row.style.display = text.includes(filter) ? '' : 'none';
+        });
+    });
+</script>
+
+</body>
+</html>

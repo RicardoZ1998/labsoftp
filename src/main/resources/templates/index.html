@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Inicio - Sistema de Gestión Veterinaria</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+
+<header th:replace="~{fragments/sidebar :: topbar}"></header>
+
+<div class="main-wrapper">
+
+    <aside th:replace="~{fragments/sidebar :: sidebar('inicio')}"></aside>
+
+    <main class="content-area">
+
+        <div class="page-title">
+            <span>Inicio</span>
+            <div>
+                <a th:href="@{/citas/form}" class="btn btn-primary">+ Agendar Cita</a>
+                <a th:href="@{/mascotas/form}" class="btn btn-secondary">+ Registrar Mascota</a>
+            </div>
+        </div>
+
+        <div class="summary-box">
+            <strong>Resumen de Registros:</strong>
+            <div class="summary-list">
+                <div class="summary-item">
+                    Dueños registrados:
+                    <strong th:text="${totalDuenos}">0</strong>
+                </div>
+                <div class="summary-item">
+                    Mascotas atendidas:
+                    <strong th:text="${totalMascotas}">0</strong>
+                </div>
+                <div class="summary-item">
+                    Citas médicas:
+                    <strong th:text="${totalCitas}">0</strong>
+                </div>
+                <div class="summary-item">
+                    Tratamientos aplicados:
+                    <strong th:text="${totalTratamientos}">0</strong>
+                </div>
+            </div>
+        </div>
+
+        <div class="table-toolbar">
+            <span style="font-weight: bold; font-size: 13px;">Citas Médicas Programadas</span>
+            <input type="text" id="tableSearch" class="search-input" placeholder="Filtrar citas por mascota, dueño o veterinario...">
+        </div>
+
+        <div class="table-container">
+            <table class="data-table">
+                <thead>
+                <tr>
+                    <th style="width: 50px;">ID</th>
+                    <th style="width: 90px;">Fecha</th>
+                    <th>Mascota</th>
+                    <th>Especie</th>
+                    <th>Dueño</th>
+                    <th>Motivo</th>
+                    <th>Veterinario</th>
+                    <th>Tratamientos</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="c : ${ultimasCitas}">
+                    <td th:text="${c.id}">1</td>
+                    <td th:text="${c.fecha}">2026-11-20</td>
+                    <td th:text="${c.mascota != null ? c.mascota.nombre : 'Sin asignar'}">Bobby</td>
+                    <td th:text="${c.mascota != null ? c.mascota.especie : '-'}">Perro</td>
+                    <td th:text="${c.mascota != null and c.mascota.dueno != null ? c.mascota.dueno.nombre : '-'}">Juan Pérez</td>
+                    <td th:text="${c.motivo}">Control</td>
+                    <td th:text="${c.veterinario}">Dra. Gómez</td>
+                    <td th:text="${#lists.size(c.tratamientos)} + ' registrado(s)'">0</td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(ultimasCitas)}" id="emptyRow">
+                    <td colspan="8" style="text-align: center; color: #777777; padding: 15px;">
+                        No hay citas registradas en el sistema.
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </main>
+
+</div>
+
+<script>
+    document.getElementById('tableSearch')?.addEventListener('input', function () {
+        const filter = this.value.toLowerCase().trim();
+        const rows = document.querySelectorAll('.data-table tbody tr:not(#emptyRow)');
+        rows.forEach(row => {
+            const text = row.textContent.toLowerCase();
+            row.style.display = text.includes(filter) ? '' : 'none';
+        });
+    });
+</script>
+
+</body>
+</html>

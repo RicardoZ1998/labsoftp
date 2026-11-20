@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario Tratamiento - Sistema de Gestión Veterinaria</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+
+<header th:replace="~{fragments/sidebar :: topbar}"></header>
+
+<div class="main-wrapper">
+
+    <aside th:replace="~{fragments/sidebar :: sidebar('tratamientos')}"></aside>
+
+    <main class="content-area">
+
+        <div class="page-title">
+            <span th:text="${tratamiento.id == null ? 'Registro de Tratamiento' : 'Modificación de Tratamiento'}">Registro de Tratamiento</span>
+            <a th:href="@{/tratamientos}" class="btn btn-secondary">Volver al listado</a>
+        </div>
+
+        <div class="form-panel">
+            <form th:action="@{/tratamientos/save}" th:object="${tratamiento}" method="post">
+                <input type="hidden" th:field="*{id}">
+
+                <div class="form-row">
+                    <label for="cita">Cita médica asociada (*):</label>
+                    <select id="cita" th:field="*{cita.id}" class="form-select" required>
+                        <option value="">-- Seleccione una cita médica --</option>
+                        <option th:each="c : ${citas}"
+                                th:value="${c.id}"
+                                th:text="${'Cita #' + c.id + ' (' + c.fecha + ') - Paciente: ' + (c.mascota != null ? c.mascota.nombre : 'N/A') + ' - Vet: ' + c.veterinario}">
+                            Cita #1 (2026-11-20) - Paciente: Firulais - Vet: Dr. Pinillos
+                        </option>
+                    </select>
+                </div>
+
+                <div class="form-row">
+                    <label for="descripcion">Medicamento o procedimiento (*):</label>
+                    <input type="text" id="descripcion" th:field="*{descripcion}" class="form-input" required>
+                </div>
+
+                <div class="form-row">
+                    <label for="dosis">Dosis / Indicaciones (*):</label>
+                    <input type="text" id="dosis" th:field="*{dosis}" class="form-input" required>
+                </div>
+
+                <div class="form-buttons">
+                    <button type="submit" class="btn btn-primary">Guardar Registro</button>
+                    <a th:href="@{/tratamientos}" class="btn btn-secondary">Cancelar</a>
+                </div>
+            </form>
+        </div>
+
+    </main>
+
+</div>
+
+</body>
+</html>
