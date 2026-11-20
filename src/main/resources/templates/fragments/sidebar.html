@@ -2,10 +2,24 @@
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 <body>
 
-<!-- Mantiene compatibilidad con cualquier llamada existente a sidebar -->
-<div th:fragment="sidebar(activeTab)">
-    <header th:replace="~{fragments/navbar :: navbar(${activeTab})}"></header>
-</div>
+<header th:fragment="topbar" class="header-top">
+    <div class="header-brand">Sistema de Gestión Veterinaria</div>
+    <div class="header-user">Usuario: <strong>Administrador</strong> | Clínica Veterinaria</div>
+</header>
+
+<aside th:fragment="sidebar(activeTab)" class="sidebar-classic">
+    <nav class="sidebar-nav">
+        <a th:href="@{/}" th:classappend="${activeTab == 'inicio'} ? ' active' : ''" class="sidebar-link">Inicio</a>
+        <a th:href="@{/mascotas}" th:classappend="${activeTab == 'mascotas'} ? ' active' : ''" class="sidebar-link">Mascotas</a>
+        <a th:href="@{/duenos}" th:classappend="${activeTab == 'duenos'} ? ' active' : ''" class="sidebar-link">Dueños</a>
+        <a th:href="@{/citas}" th:classappend="${activeTab == 'citas'} ? ' active' : ''" class="sidebar-link">Citas</a>
+        <a th:href="@{/tratamientos}" th:classappend="${activeTab == 'tratamientos'} ? ' active' : ''" class="sidebar-link">Tratamientos</a>
+    </nav>
+    <div class="sidebar-footer-text">
+        Desarrollo de Software III<br>
+        Universidad del Valle (Sede Tuluá)
+    </div>
+</aside>
 
 </body>
 </html>

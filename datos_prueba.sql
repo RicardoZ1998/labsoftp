@@ -1,12 +1,5 @@
--- ==========================================================
--- SCRIPT DE DATOS DE PRUEBA: SISTEMA DE GESTIÓN VETERINARIA
--- Laboratorio #2 - Modelo B - Tecnología en Sistemas
--- Universidad del Valle - Sede Tuluá
--- ==========================================================
-
 USE labsoft;
 
--- 1. Inserción de Dueños
 INSERT INTO duenos (id, nombre, telefono, correo, direccion) VALUES
 (1, 'Carlos Andrés Ramírez', '3158901234', 'carlos.ramirez@gmail.com', 'Carrera 25 # 14-30, Tuluá'),
 (2, 'María Fernanda Gómez', '3104567890', 'maria.gomez@hotmail.com', 'Calle 10 # 5-20, Tuluá'),
@@ -15,7 +8,6 @@ INSERT INTO duenos (id, nombre, telefono, correo, direccion) VALUES
 (5, 'Andrés Felipe Restrepo', '3189998877', 'andres.restrepo@outlook.com', 'Carrera 40 # 22-10, Tuluá')
 ON DUPLICATE KEY UPDATE nombre=VALUES(nombre);
 
--- 2. Inserción de Mascotas (relacionadas con duenos via dueno_id)
 INSERT INTO mascotas (id, nombre, especie, raza, edad, dueno_id) VALUES
 (1, 'Rocky', 'Perro', 'Golden Retriever', 4, 1),
 (2, 'Luna', 'Gato', 'Siamés', 2, 2),
@@ -25,7 +17,6 @@ INSERT INTO mascotas (id, nombre, especie, raza, edad, dueno_id) VALUES
 (6, 'Misi', 'Gato', 'Persa', 6, 5)
 ON DUPLICATE KEY UPDATE nombre=VALUES(nombre);
 
--- 3. Inserción de Citas Médicas (relacionadas con mascotas via mascota_id)
 INSERT INTO citas (id, fecha, motivo, veterinario, mascota_id) VALUES
 (1, '2026-11-15', 'Vacunación antirrábica y desparasitación anual', 'Dra. Laura Hernández', 1),
 (2, '2026-11-18', 'Control posoperatorio y retiro de puntos', 'Dr. Juan Pablo Pinillos', 2),
@@ -35,7 +26,6 @@ INSERT INTO citas (id, fecha, motivo, veterinario, mascota_id) VALUES
 (6, '2026-11-28', 'Limpieza dental profunda', 'Dra. Laura Hernández', 6)
 ON DUPLICATE KEY UPDATE motivo=VALUES(motivo);
 
--- 4. Inserción de Tratamientos (relacionados con citas via cita_id)
 INSERT INTO tratamientos (id, descripcion, dosis, cita_id) VALUES
 (1, 'Vacuna Rabisin + Antiparasitario NexGard Spectra', 'Dosis única oral y subcutánea', 1),
 (2, 'Limpieza antiséptica con Clorhexidina al 2% y pomada cicatrizante', 'Aplicar cada 12 horas por 5 días', 2),

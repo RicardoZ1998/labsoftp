@@ -9,62 +9,80 @@
 
 <body>
 
-<header th:replace="~{fragments/navbar :: navbar('duenos')}"></header>
+<header th:replace="~{fragments/sidebar :: topbar}"></header>
 
-<div class="container">
+<div class="main-wrapper">
 
-    <div class="page-title">
-        <span>Dueños de Mascotas</span>
-        <a th:href="@{/duenos/form}" class="btn btn-primary">+ Nuevo Dueño</a>
-    </div>
+    <aside th:replace="~{fragments/sidebar :: sidebar('duenos')}"></aside>
 
-    <!-- MENSAJES -->
-    <div class="alert alert-success" th:if="${success}" th:text="${success}"></div>
-    <div class="alert alert-danger" th:if="${error}" th:text="${error}"></div>
+    <main class="content-area">
 
-    <div class="table-container">
-        <table class="data-table">
-            <thead>
-            <tr>
-                <th style="width: 40px;">ID</th>
-                <th>Nombre</th>
-                <th>Teléfono</th>
-                <th>Correo Electrónico</th>
-                <th>Dirección</th>
-                <th style="width: 80px;">Mascotas</th>
-                <th style="width: 140px; text-align: center;">Acciones</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="d : ${duenos}">
-                <td th:text="${d.id}">1</td>
-                <td th:text="${d.nombre}">Juan Pérez</td>
-                <td th:text="${d.telefono}">3001234567</td>
-                <td th:text="${d.correo}">juan@mail.com</td>
-                <td th:text="${d.direccion}">Calle 10 # 5-20</td>
-                <td style="text-align: center;" th:text="${#lists.size(d.mascotas)}">0</td>
-                <td style="text-align: center;">
-                    <a th:href="@{/duenos/edit/{id}(id=${d.id})}" class="action-link">[Editar]</a>
-                    <span> | </span>
-                    <form th:action="@{/duenos/delete/{id}(id=${d.id})}" method="post" style="display:inline;" onsubmit="return confirm('¿Confirma la eliminación del dueño y sus mascotas?');">
-                        <button type="submit" class="action-link delete">[Eliminar]</button>
-                    </form>
-                </td>
-            </tr>
-            <tr th:if="${#lists.isEmpty(duenos)}">
-                <td colspan="7" style="text-align: center; color: #777777; padding: 15px;">
-                    No existen dueños registrados.
-                </td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
+        <div class="page-title">
+            <span>Dueños de Mascotas</span>
+        </div>
 
-    <div class="footer">
-        Desarrollo de Software III - Universidad del Valle (Sede Tuluá)
-    </div>
+        <div class="alert alert-success" th:if="${success}" th:text="${success}"></div>
+        <div class="alert alert-danger" th:if="${error}" th:text="${error}"></div>
+
+        <div class="table-toolbar">
+            <div class="search-box">
+                <input type="text" id="tableSearch" class="search-input" placeholder="Buscar por nombre, teléfono o correo...">
+            </div>
+            <a th:href="@{/duenos/form}" class="btn btn-primary">+ Nuevo Dueño</a>
+        </div>
+
+        <div class="table-container">
+            <table class="data-table">
+                <thead>
+                <tr>
+                    <th style="width: 40px;">ID</th>
+                    <th>Nombre</th>
+                    <th>Teléfono</th>
+                    <th>Correo Electrónico</th>
+                    <th>Dirección</th>
+                    <th style="width: 80px; text-align: center;">Mascotas</th>
+                    <th style="width: 140px; text-align: center;">Acciones</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="d : ${duenos}">
+                    <td th:text="${d.id}">1</td>
+                    <td th:text="${d.nombre}">Juan Pérez</td>
+                    <td th:text="${d.telefono}">3001234567</td>
+                    <td th:text="${d.correo}">juan@mail.com</td>
+                    <td th:text="${d.direccion}">Calle 10 # 5-20</td>
+                    <td style="text-align: center;" th:text="${#lists.size(d.mascotas)}">0</td>
+                    <td style="text-align: center;">
+                        <a th:href="@{/duenos/edit/{id}(id=${d.id})}" class="action-link">[Editar]</a>
+                        <span> | </span>
+                        <form th:action="@{/duenos/delete/{id}(id=${d.id})}" method="post" style="display:inline;" onsubmit="return confirm('¿Confirma la eliminación del dueño y sus mascotas?');">
+                            <button type="submit" class="action-link delete">[Eliminar]</button>
+                        </form>
+                    </td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(duenos)}" id="emptyRow">
+                    <td colspan="7" style="text-align: center; color: #777777; padding: 15px;">
+                        No existen dueños registrados.
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </main>
 
 </div>
+
+<script>
+    document.getElementById('tableSearch')?.addEventListener('input', function () {
+        const filter = this.value.toLowerCase().trim();
+        const rows = document.querySelectorAll('.data-table tbody tr:not(#emptyRow)');
+        rows.forEach(row => {
+            const text = row.textContent.toLowerCase();
+            row.style.display = text.includes(filter) ? '' : 'none';
+        });
+    });
+</script>
 
 </body>
 </html>
