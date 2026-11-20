@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<!-- Mantiene compatibilidad con cualquier llamada existente a sidebar -->
+<div th:fragment="sidebar(activeTab)">
+    <header th:replace="~{fragments/navbar :: navbar(${activeTab})}"></header>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Formulario Dueño - Sistema de Gestión Veterinaria</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+
+<header th:replace="~{fragments/navbar :: navbar('duenos')}"></header>
+
+<div class="container">
+
+    <div class="page-title">
+        <span th:text="${dueno.id == null ? 'Registro de Dueño' : 'Modificación de Dueño'}">Registro de Dueño</span>
+        <a th:href="@{/duenos}" class="btn btn-secondary">Volver al listado</a>
+    </div>
+
+    <div class="form-panel">
+        <form th:action="@{/duenos/save}" th:object="${dueno}" method="post">
+            <input type="hidden" th:field="*{id}">
+
+            <div class="form-row">
+                <label for="nombre">Nombre completo (*):</label>
+                <input type="text" id="nombre" th:field="*{nombre}" class="form-input" required>
+            </div>
+
+            <div class="form-row">
+                <label for="telefono">Teléfono:</label>
+                <input type="text" id="telefono" th:field="*{telefono}" class="form-input">
+            </div>
+
+            <div class="form-row">
+                <label for="correo">Correo electrónico:</label>
+                <input type="email" id="correo" th:field="*{correo}" class="form-input">
+            </div>
+
+            <div class="form-row">
+                <label for="direccion">Dirección:</label>
+                <input type="text" id="direccion" th:field="*{direccion}" class="form-input">
+            </div>
+
+            <div class="form-buttons">
+                <button type="submit" class="btn btn-primary">Guardar Registro</button>
+                <a th:href="@{/duenos}" class="btn btn-secondary">Cancelar</a>
+            </div>
+        </form>
+    </div>
+
+    <div class="footer">
+        Desarrollo de Software III - Universidad del Valle (Sede Tuluá)
+    </div>
+
+</div>
+
+</body>
+</html>

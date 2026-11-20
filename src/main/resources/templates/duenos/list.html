@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Dueños - Sistema de Gestión Veterinaria</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+
+<header th:replace="~{fragments/navbar :: navbar('duenos')}"></header>
+
+<div class="container">
+
+    <div class="page-title">
+        <span>Dueños de Mascotas</span>
+        <a th:href="@{/duenos/form}" class="btn btn-primary">+ Nuevo Dueño</a>
+    </div>
+
+    <!-- MENSAJES -->
+    <div class="alert alert-success" th:if="${success}" th:text="${success}"></div>
+    <div class="alert alert-danger" th:if="${error}" th:text="${error}"></div>
+
+    <div class="table-container">
+        <table class="data-table">
+            <thead>
+            <tr>
+                <th style="width: 40px;">ID</th>
+                <th>Nombre</th>
+                <th>Teléfono</th>
+                <th>Correo Electrónico</th>
+                <th>Dirección</th>
+                <th style="width: 80px;">Mascotas</th>
+                <th style="width: 140px; text-align: center;">Acciones</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="d : ${duenos}">
+                <td th:text="${d.id}">1</td>
+                <td th:text="${d.nombre}">Juan Pérez</td>
+                <td th:text="${d.telefono}">3001234567</td>
+                <td th:text="${d.correo}">juan@mail.com</td>
+                <td th:text="${d.direccion}">Calle 10 # 5-20</td>
+                <td style="text-align: center;" th:text="${#lists.size(d.mascotas)}">0</td>
+                <td style="text-align: center;">
+                    <a th:href="@{/duenos/edit/{id}(id=${d.id})}" class="action-link">[Editar]</a>
+                    <span> | </span>
+                    <form th:action="@{/duenos/delete/{id}(id=${d.id})}" method="post" style="display:inline;" onsubmit="return confirm('¿Confirma la eliminación del dueño y sus mascotas?');">
+                        <button type="submit" class="action-link delete">[Eliminar]</button>
+                    </form>
+                </td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(duenos)}">
+                <td colspan="7" style="text-align: center; color: #777777; padding: 15px;">
+                    No existen dueños registrados.
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="footer">
+        Desarrollo de Software III - Universidad del Valle (Sede Tuluá)
+    </div>
+
+</div>
+
+</body>
+</html>

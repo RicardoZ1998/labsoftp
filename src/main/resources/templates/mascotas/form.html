@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Formulario Mascota - Sistema de Gestión Veterinaria</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+
+<header th:replace="~{fragments/navbar :: navbar('mascotas')}"></header>
+
+<div class="container">
+
+    <div class="page-title">
+        <span th:text="${mascota.id == null ? 'Registro de Mascota' : 'Modificación de Mascota'}">Registro de Mascota</span>
+        <a th:href="@{/mascotas}" class="btn btn-secondary">Volver al listado</a>
+    </div>
+
+    <div class="form-panel">
+        <form th:action="@{/mascotas/save}" th:object="${mascota}" method="post">
+            <input type="hidden" th:field="*{id}">
+
+            <div class="form-row">
+                <label for="nombre">Nombre de la mascota (*):</label>
+                <input type="text" id="nombre" th:field="*{nombre}" class="form-input" required>
+            </div>
+
+            <div class="form-row">
+                <label for="especie">Especie (*):</label>
+                <select id="especie" th:field="*{especie}" class="form-select" required>
+                    <option value="">-- Seleccione --</option>
+                    <option value="Perro">Perro</option>
+                    <option value="Gato">Gato</option>
+                    <option value="Conejo">Conejo</option>
+                    <option value="Ave">Ave</option>
+                    <option value="Otro">Otro</option>
+                </select>
+            </div>
+
+            <div class="form-row">
+                <label for="raza">Raza:</label>
+                <input type="text" id="raza" th:field="*{raza}" class="form-input">
+            </div>
+
+            <div class="form-row">
+                <label for="edad">Edad (en años):</label>
+                <input type="number" id="edad" th:field="*{edad}" class="form-input" min="0" max="40">
+            </div>
+
+            <div class="form-row">
+                <label for="dueno">Dueño asignado (*):</label>
+                <select id="dueno" th:field="*{dueno.id}" class="form-select" required>
+                    <option value="">-- Seleccione un dueño --</option>
+                    <option th:each="d : ${duenos}"
+                            th:value="${d.id}"
+                            th:text="${d.nombre + ' (Tel: ' + (d.telefono != null ? d.telefono : 'N/A') + ')'}">
+                        Carlos Ramírez
+                    </option>
+                </select>
+            </div>
+
+            <div class="form-buttons">
+                <button type="submit" class="btn btn-primary">Guardar Registro</button>
+                <a th:href="@{/mascotas}" class="btn btn-secondary">Cancelar</a>
+            </div>
+        </form>
+    </div>
+
+    <div class="footer">
+        Desarrollo de Software III - Universidad del Valle (Sede Tuluá)
+    </div>
+
+</div>
+
+</body>
+</html>

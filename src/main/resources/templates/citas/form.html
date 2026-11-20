@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Formulario Cita - Sistema de Gestión Veterinaria</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+
+<header th:replace="~{fragments/navbar :: navbar('citas')}"></header>
+
+<div class="container">
+
+    <div class="page-title">
+        <span th:text="${cita.id == null ? 'Agendar Cita Médica' : 'Modificación de Cita Médica'}">Agendar Cita</span>
+        <a th:href="@{/citas}" class="btn btn-secondary">Volver al listado</a>
+    </div>
+
+    <div class="form-panel">
+        <form th:action="@{/citas/save}" th:object="${cita}" method="post">
+            <input type="hidden" th:field="*{id}">
+
+            <div class="form-row">
+                <label for="fecha">Fecha de consulta (*):</label>
+                <input type="date" id="fecha" th:field="*{fecha}" class="form-input" required>
+            </div>
+
+            <div class="form-row">
+                <label for="veterinario">Veterinario responsable (*):</label>
+                <input type="text" id="veterinario" th:field="*{veterinario}" class="form-input" placeholder="Nombre del profesional" required>
+            </div>
+
+            <div class="form-row">
+                <label for="mascota">Mascota (paciente) (*):</label>
+                <select id="mascota" th:field="*{mascota.id}" class="form-select" required>
+                    <option value="">-- Seleccione una mascota --</option>
+                    <option th:each="m : ${mascotas}"
+                            th:value="${m.id}"
+                            th:text="${m.nombre + ' (' + m.especie + ') - Dueño: ' + (m.dueno != null ? m.dueno.nombre : 'Sin dueño')}">
+                        Firulais (Perro) - Dueño: Carlos
+                    </option>
+                </select>
+            </div>
+
+            <div class="form-row">
+                <label for="motivo">Motivo de consulta (*):</label>
+                <textarea id="motivo" th:field="*{motivo}" class="form-textarea" rows="3" required></textarea>
+            </div>
+
+            <div class="form-buttons">
+                <button type="submit" class="btn btn-primary">Guardar Registro</button>
+                <a th:href="@{/citas}" class="btn btn-secondary">Cancelar</a>
+            </div>
+        </form>
+    </div>
+
+    <div class="footer">
+        Desarrollo de Software III - Universidad del Valle (Sede Tuluá)
+    </div>
+
+</div>
+
+</body>
+</html>

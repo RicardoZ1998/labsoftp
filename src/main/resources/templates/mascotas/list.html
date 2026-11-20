@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Mascotas - Sistema de Gestión Veterinaria</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+
+<header th:replace="~{fragments/navbar :: navbar('mascotas')}"></header>
+
+<div class="container">
+
+    <div class="page-title">
+        <span>Listado de Mascotas</span>
+        <a th:href="@{/mascotas/form}" class="btn btn-primary">+ Nueva Mascota</a>
+    </div>
+
+    <!-- MENSAJES -->
+    <div class="alert alert-success" th:if="${success}" th:text="${success}"></div>
+    <div class="alert alert-danger" th:if="${error}" th:text="${error}"></div>
+
+    <div class="table-container">
+        <table class="data-table">
+            <thead>
+            <tr>
+                <th style="width: 40px;">ID</th>
+                <th>Nombre</th>
+                <th>Especie</th>
+                <th>Raza</th>
+                <th style="width: 60px;">Edad</th>
+                <th>Dueño</th>
+                <th>Teléfono Dueño</th>
+                <th style="width: 140px; text-align: center;">Acciones</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="m : ${mascotas}">
+                <td th:text="${m.id}">1</td>
+                <td th:text="${m.nombre}">Lucas</td>
+                <td th:text="${m.especie}">Perro</td>
+                <td th:text="${m.raza}">Golden Retriever</td>
+                <td th:text="${m.edad} + ' años'">4 años</td>
+                <td th:text="${m.dueno != null ? m.dueno.nombre : 'Sin asignar'}">Juan Pérez</td>
+                <td th:text="${m.dueno != null ? m.dueno.telefono : '-'}">3001234567</td>
+                <td style="text-align: center;">
+                    <a th:href="@{/mascotas/edit/{id}(id=${m.id})}" class="action-link">[Editar]</a>
+                    <span> | </span>
+                    <form th:action="@{/mascotas/delete/{id}(id=${m.id})}" method="post" style="display:inline;" onsubmit="return confirm('¿Confirma la eliminación de la mascota?');">
+                        <button type="submit" class="action-link delete">[Eliminar]</button>
+                    </form>
+                </td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(mascotas)}">
+                <td colspan="8" style="text-align: center; color: #777777; padding: 15px;">
+                    No existen mascotas registradas.
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="footer">
+        Desarrollo de Software III - Universidad del Valle (Sede Tuluá)
+    </div>
+
+</div>
+
+</body>
+</html>
