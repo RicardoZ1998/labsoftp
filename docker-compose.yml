@@ -1,0 +1,38 @@
+services:
+  db:
+    image: mysql:8.0
+    container_name: labsoft-db
+    environment:
+      MYSQL_DATABASE: labsoft          # misma BD que usa application.properties
+      MYSQL_USER: labsoft
+      MYSQL_PASSWORD: ${DB_PASSWORD:-labsoft123}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-root123}
+      TZ: America/Bogota
+    ports:
+      - "3307:3306"                    # 3307 en el host para no chocar con un MySQL local en 3306
+    volumes:
+      - db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -uroot -p$$MYSQL_ROOT_PASSWORD --silent"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 20s
+
+  app:
+    build: .
+    container_name: labsoft-app
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "8081:8080"
+    environment:
+      # Spring Boot sobrescribe spring.datasource.* de application.properties con estas variables
+      SPRING_DATASOURCE_URL: "jdbc:mysql://db:3306/labsoft?allowPublicKeyRetrieval=true&useSSL=false"
+      SPRING_DATASOURCE_USERNAME: labsoft
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD:-labsoft123}
+    restart: on-failure
+
+volumes:
+  db_data:

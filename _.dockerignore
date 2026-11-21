@@ -1,0 +1,16 @@
+target/
+.git
+.gitignore
+.gitattributes
+.idea/
+.vscode/
+*.iml
+.classpath
+.project
+.settings/
+HELP.md
+entidades.png
+datos_prueba.sql
+Dockerfile
+docker-compose.yml
+.dockerignore
